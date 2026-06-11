@@ -1,36 +1,96 @@
 # -----------------------------
+
 # Build directory
+
 # -----------------------------
+
 build/
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
 Makefile
 
-# Compiled binary
+# Compiled binaries
+
 generate
+*.o
+*.so
+*.a
 
 # -----------------------------
+
 # Data files
+
 # -----------------------------
+
 *.csv
 
-# -----------------------------
-# Model files
-# -----------------------------
-*.pth
+# Large physics data
+
+*.dat
+*.oscar
 
 # -----------------------------
-# Python cache
+
+# ROOT files
+
 # -----------------------------
-__pycache__/
+
+*.root
+
+# Optional: ignore ROOT output directories
+
+rootfiles/
+sampler_output/
+
+# -----------------------------
+
+# Model files
+
+# -----------------------------
+
+*.pth
+*.pt
+*.onnx
+
+# -----------------------------
+
+# Python cache
+
+# -----------------------------
+
+**pycache**/
 *.pyc
+*.pyo
 
 # Virtual environments
+
 venv/
 qgp_env/
+.env
 
 # -----------------------------
-# System files
+
+# Jupyter
+
 # -----------------------------
+
+.ipynb_checkpoints/
+
+# -----------------------------
+
+# IDE files
+
+# -----------------------------
+
+.vscode/
+.idea/
+
+# -----------------------------
+
+# System files
+
+# -----------------------------
+
 .DS_Store
+Thumbs.db
