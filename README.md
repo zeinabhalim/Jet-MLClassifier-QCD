@@ -1,4 +1,4 @@
-# Quark–Gluon Jet Binary Classification Project
+# QCD Matter Tomography: Jet Classification & Critical Point Detection
 
  Quark- and gluon-initiated jets exhibit subtle differences arising from Quantum Chromodynamics (QCD) color factors. As the gluons carry a larger color charge ( \( C_A = 3 \) ) than quarks ( \( C_F = 4/3 \) ) therefore gluon jets radiate more intensely. This enhanced radiation leads to broader jets with higher particle multiplicity and variations in jet substructure observables such as:
 
