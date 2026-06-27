@@ -1,6 +1,6 @@
 
 """
-Heavy-Ion Jet Classifier: signal (7.7 GeV Ising-embedded) vs baseline (19.6 GeV)
+Heavy-Ion Jet Classifier
 Features: jet_pt, jet_eta, jet_phi, jet_mass, nconstituents, pt_d, sqrt_d12
 """
 
@@ -19,12 +19,30 @@ import os
 
 # ── Load data ──────────────────────────────────────────────────────────────
 print("Loading datasets...")
-s  = pd.read_csv("jets_signal_7gev.csv")    # label=1
-b  = pd.read_csv("jets_baseline_19gev.csv") # label=0
+# Load afterburner SMASH data
+s = pd.read_csv("jets_signal_7gev_smash.csv")    # label=1
+b = pd.read_csv("jets_baseline_19gev_smash.csv") # label=0
 df = pd.concat([s, b], ignore_index=True)
 
+# Expand the feature set if needed (e.g., adding Charge Multiplicity)
 FEATURES = ['jet_pt','jet_eta','jet_phi','jet_mass',
             'nconstituents','pt_d','sqrt_d12']
+
+# A systematic check for the consistent signal
+def analyze_signal_loss(sampler_csv, smash_csv):
+    s_sampler = pd.read_csv(sampler_csv)
+    s_smash = pd.read_csv(smash_csv)
+    
+    print("\n--- Afterburner Impact Analysis ---")
+    print(f"Mean Jet Mass (Sampler): {s_sampler['jet_mass'].mean():.4f}")
+    print(f"Mean Jet Mass (SMASH):   {s_smash['jet_mass'].mean():.4f}")
+    # Higher mass after SMASH usually indicates resonance decays widening the jet
+    
+    # Check if the "Ising" features (pt_d, sqrt_d12) are still distinctive
+    for f in ['pt_d', 'sqrt_d12']:
+        diff = ((s_smash[f].mean() - s_sampler[f].mean()) / s_sampler[f].mean()) * 100
+        print(f"Feature '{f}' shifted by {diff:+.2f}% after SMASH")
+
 
 X = df[FEATURES].values.astype(np.float32)
 y = df['label'].values.astype(np.float32)
@@ -180,6 +198,15 @@ axes[1,1].set_xlabel('Correlation with classifier score')
 axes[1,1].set_title('Feature Importance')
 axes[1,1].axvline(0, color='black', lw=0.5)
 axes[1,1].grid(True, alpha=0.3)
+
+# Compare sampler vs afterburner signal survival
+try:
+    analyze_signal_loss(
+        "jets_signal_7gev.csv",       # sampler output (frozen)
+        "jets_signal_7gev_smash.csv"  # afterburner output
+    )
+except Exception as e:
+    print(f"Signal loss analysis: {e}")
 
 plt.suptitle('Heavy-Ion Jet Classifier: Ising CP Signal Detection\n'
              '7.7 GeV (signal) vs 19.6 GeV (baseline)', fontsize=12)
